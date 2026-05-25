@@ -1,7 +1,7 @@
 "use client"
 import { useState } from "react"
 
-import OverviewTab from "@/components/servers/OvervierTab/OverviewTab"
+import OverviewTab from "@/components/servers/OverviewTab/OverviewTab"
 import SSHTab from "@/components/servers/SSHTab"
 import MonitoringTab from "@/components/servers/MonitoringTab"
 import FilesTab from "@/components/servers/SFTPTab"

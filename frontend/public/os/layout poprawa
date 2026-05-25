@@ -1,0 +1,6 @@
+do poprawy jest:
+
+- tlo przy skalowaniu - od 550px w dol tlo sie dziwnie rozjezdza
+- przyciski start stop i etykieta "ONLINE" przy skalowaniu
+- przez flex-1 last login i network info jest na full-h na xl breakpoint +
+nie sa tej samej szerokosci co karty wyzej 

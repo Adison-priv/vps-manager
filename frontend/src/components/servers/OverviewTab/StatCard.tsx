@@ -27,7 +27,7 @@ export default function StatCard({
 }: StatCardProps) {
 
   return (
-    <div className="bg-[#0f1629] border border-[#1b2540] rounded-2xl p-4 flex flex-col justify-between min-h-[140px]">
+    <div className="">
 
       {/* TOP */}
       <div className="flex items-start justify-between">
@@ -38,8 +38,8 @@ export default function StatCard({
             {title}
           </p>
 
-          <h2 className="text-4xl font-semibold mt-1">
-            {value}
+          <h2 className="text-3xl font-semibold mt-1">
+            {value}<span className="text-lg text-[#7c8aa5] font-normal ml-2">MBp/s</span>
           </h2>
 
           <p className="text-[#7c8aa5] text-sm mt-1">
@@ -48,7 +48,7 @@ export default function StatCard({
 
         </div>
 
-        <div className="bg-[#131c31] border border-[#1b2540] rounded-lg p-2">
+        <div className="bg-[#131c31] border border-[#1b2540] rounded-lg p-2 shadow-[0_0_30px_rgba(59,130,246,0.15)]">
 
           <Icon
             size={25}
