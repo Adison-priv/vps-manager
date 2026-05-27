@@ -10,16 +10,28 @@ datasource db {
 
 model Server {
 
-  id         String   @id @default(cuid())
+  id String @id @default(cuid())
 
-  name       String
+  hostname String
 
-  host       String
-  port       Int
+  host String
+  port Int
 
-  username   String
+  username String
+
+  os String?
+
+  region String?
+
+  cpuCores Int?
+
+  ramTotal Int?
+
+  diskTotal String?
+
+  status String?
 
   privateKey String?
 
-  createdAt  DateTime @default(now())
+  createdAt DateTime @default(now())
 }

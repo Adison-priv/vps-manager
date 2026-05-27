@@ -13,7 +13,7 @@ export function connectSSH({
     port,
     username,
     privateKey
-}: ConnectSSHParams) {
+}: ConnectSSHParams): Promise<Client> {
 
     return new Promise((resolve, reject) => {
 
@@ -23,32 +23,7 @@ export function connectSSH({
 
             console.log("SSH connected")
 
-            conn.exec("hostname", (err, stream) => {
-
-                if (err) {
-
-                    reject(err)
-                    return
-
-                }
-
-                let data = ""
-
-                stream.on("data", (chunk:any) => {
-
-                    data += chunk.toString()
-
-                })
-
-                stream.on("close", () => {
-
-                    conn.end()
-
-                    resolve(data.trim())
-
-                })
-
-            })
+            resolve(conn)
 
         })
 
@@ -67,5 +42,83 @@ export function connectSSH({
         })
 
     })
+
+}
+
+export function executeCommand(
+    conn: Client,
+    command: string
+): Promise<string> {
+
+    return new Promise((resolve, reject) => {
+
+        conn.exec(command, (err, stream) => {
+
+            if (err) {
+                reject(err)
+                return
+            }
+
+            let data = ""
+
+            stream.on("data", (chunk: Buffer) => {
+
+                data += chunk.toString()
+
+            })
+
+            stream.on("close", () => {
+
+                resolve(data.trim())
+
+            })
+
+        })
+
+    })
+
+}
+
+export async function getHostname(conn: Client) {
+
+    return executeCommand(conn, "hostname")
+
+}
+
+export async function getCpuCores(conn: Client) {
+
+    return executeCommand(conn, "nproc")
+
+}
+
+export async function getRamTotal(conn: Client) {
+
+    return executeCommand(
+        conn,
+        "free -m | awk '/Mem:/ {print $2}'"
+    )
+
+}
+
+export async function getDiskTotal(conn: Client) {
+
+    return executeCommand(
+        conn,
+        "df -BG / | awk 'NR==2 {print $2}'"
+    )
+
+}
+
+export async function getOS(conn: Client) {
+
+    const output = await executeCommand(
+        conn,
+        "cat /etc/os-release | grep PRETTY_NAME"
+    )
+
+    return output
+        .replace('PRETTY_NAME=', "")
+        .replace(/"/g, "")
+        .trim()
 
 }

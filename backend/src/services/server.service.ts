@@ -1,33 +1,61 @@
 import { prisma } from "../lib/prisma"
 
 type CreateServerParams = {
-    name: string
+
+    hostname: string
 
     host: string
     port: number
 
     username: string
 
+    cpuCores?: number
+
+    ramTotal?: number
+
+    diskTotal?: string
+
+    os?: string
+
+    region?: string
+
+    status?: string
+
     privateKey?: string
 }
 
 export async function createServer({
-    name,
+    hostname,
     host,
     port,
     username,
+    
+    cpuCores,
+    ramTotal,
+    diskTotal,
+    os,
+    region,
+    status,
+
     privateKey
 }: CreateServerParams) {
 
     const server = await prisma.server.create({
 
         data: {
-            name,
+            hostname,
 
             host,
             port,
 
             username,
+
+            cpuCores: cpuCores ?? null,
+            ramTotal: ramTotal ?? null,
+            diskTotal: diskTotal ?? null,
+            os: os ?? null,
+            region: region ?? null,
+            status: status ?? null,
 
             privateKey: privateKey ?? null
         }

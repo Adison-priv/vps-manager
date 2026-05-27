@@ -1,5 +1,15 @@
+import {prisma} from "../lib/prisma"
+
 import { Router } from "express"
-import { connectSSH } from "../services/ssh.service"
+import {
+    connectSSH,
+    getHostname,
+    getCpuCores,
+    getRamTotal,
+    getDiskTotal,
+    getOS
+} from "../services/ssh.service"
+
 import { createServer } from "../services/server.service"
 
 const router = Router()
@@ -9,30 +19,55 @@ router.post("/", async (req, res) => {
     try {
 
         const {
-            name,
-
             host,
             port,
-
             username,
-
             privateKey
         } = req.body
 
-        await connectSSH({
+        const conn = await connectSSH({
             host,
             port,
             username,
             privateKey
         })
 
+        const hostname = await getHostname(conn)
+
+        const cpuCores = await getCpuCores(conn)
+
+        const ramTotal = await getRamTotal(conn)
+
+        const diskTotal = await getDiskTotal(conn)
+
+        const os = await getOS(conn)
+
+        const region = "Unknown"
+
+        const statusServer = "Online"
+
+
+        conn.end()
+
         const server = await createServer({
-            name,
+
+            hostname,
 
             host,
             port,
 
             username,
+
+            os: os ?? null,
+            region: region ?? null,
+            status: statusServer ?? null,
+
+            cpuCores: Number(cpuCores),
+
+            ramTotal: Number(ramTotal),
+
+            diskTotal: diskTotal ?? null,
+
 
             privateKey
         })
@@ -48,6 +83,28 @@ router.post("/", async (req, res) => {
             success: false,
             message: "Failed to add server",
             error
+        })
+
+    }
+
+})
+
+router.get("/", async (req, res) => {
+
+    try {
+
+        const servers = await prisma.server.findMany()
+
+        res.json({
+            success: true,
+            servers
+        })
+
+    } catch (error) {
+
+        res.status(500).json({
+            success: false,
+            message: "Failed to fetch servers"
         })
 
     }

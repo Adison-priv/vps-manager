@@ -1,11 +1,11 @@
 "use client"
 import { useState } from "react"
 
-import OverviewTab from "@/components/servers/OverviewTab/OverviewTab"
-import SSHTab from "@/components/servers/SSHTab"
-import MonitoringTab from "@/components/servers/MonitoringTab"
-import FilesTab from "@/components/servers/SFTPTab"
-import LogsTab from "@/components/servers/LogsTab"
+import OverviewTab from "@/components/servers/server/OverviewTab/OverviewTab"
+import SSHTab from "@/components/servers/server/SSHTab"
+import MonitoringTab from "@/components/servers/server/MonitoringTab"
+import FilesTab from "@/components/servers/server/SFTPTab"
+import LogsTab from "@/components/servers/server/LogsTab"
 import { RefreshCw, Square } from "lucide-react"
 
 export default function Dashboard_servers_item() {
