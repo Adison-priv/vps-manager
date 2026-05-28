@@ -22,6 +22,8 @@ router.post("/", async (req, res) => {
             host,
             port,
             username,
+
+            password,
             privateKey
         } = req.body
 
@@ -29,6 +31,8 @@ router.post("/", async (req, res) => {
             host,
             port,
             username,
+
+            password,
             privateKey
         })
 
@@ -45,7 +49,6 @@ router.post("/", async (req, res) => {
         const region = "Unknown"
 
         const statusServer = "Online"
-
 
         conn.end()
 
@@ -69,7 +72,8 @@ router.post("/", async (req, res) => {
             diskTotal: diskTotal ?? null,
 
 
-            privateKey
+            privateKey,
+            password
         })
 
         res.json({
@@ -77,15 +81,17 @@ router.post("/", async (req, res) => {
             server
         })
 
-    } catch (error) {
+    } catch (error: any) {
 
-        res.status(500).json({
-            success: false,
-            message: "Failed to add server",
-            error
-        })
+    console.log(error)
 
-    }
+    res.status(500).json({
+        success: false,
+        message: error.message,
+        error
+    })
+
+}
 
 })
 
@@ -105,6 +111,43 @@ router.get("/", async (req, res) => {
         res.status(500).json({
             success: false,
             message: "Failed to fetch servers"
+        })
+
+    }
+    
+})
+
+router.get("/:id", async (req, res) => {
+
+    try {
+
+        const { id } = req.params
+
+        const server = await prisma.server.findUnique({
+            where: {
+                id
+            }
+        })
+
+        if (!server) {
+
+            return res.status(404).json({
+                success: false,
+                message: "Server not found"
+            })
+
+        }
+
+        res.json({
+            success: true,
+            server
+        })
+
+    } catch (error) {
+
+        res.status(500).json({
+            success: false,
+            message: "Failed to fetch server"
         })
 
     }

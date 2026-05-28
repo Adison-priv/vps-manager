@@ -33,5 +33,7 @@ model Server {
 
   privateKey String?
 
+  password String?
+
   createdAt DateTime @default(now())
 }

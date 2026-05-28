@@ -1,18 +1,19 @@
-import { Client } from "ssh2"
-import fs from "fs"
+import { Client, ConnectConfig } from "ssh2"
 
 type ConnectSSHParams = {
     host: string
     port: number
     username: string
-    privateKey: string
+    privateKey?: string
+    password?: string
 }
 
 export function connectSSH({
     host,
     port,
     username,
-    privateKey
+    privateKey,
+    password
 }: ConnectSSHParams): Promise<Client> {
 
     return new Promise((resolve, reject) => {
@@ -33,13 +34,25 @@ export function connectSSH({
 
         })
 
-        conn.connect({
+        conn.on("error", (err) => {
+            console.log("SSH ERROR:", err)
+        })
+
+        const config: ConnectConfig = {
             host,
             port,
-            username,
+            username
+        }
 
-            privateKey: fs.readFileSync(privateKey)
-        })
+        if (password) {
+            config.password = password
+        }
+
+        if (privateKey) {
+            config.privateKey = privateKey
+        }
+
+        conn.connect(config)
 
     })
 

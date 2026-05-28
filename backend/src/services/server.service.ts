@@ -22,6 +22,8 @@ type CreateServerParams = {
     status?: string
 
     privateKey?: string
+    
+    password?: string
 }
 
 export async function createServer({
@@ -37,7 +39,8 @@ export async function createServer({
     region,
     status,
 
-    privateKey
+    privateKey,
+    password
 }: CreateServerParams) {
 
     const server = await prisma.server.create({
@@ -57,7 +60,8 @@ export async function createServer({
             region: region ?? null,
             status: status ?? null,
 
-            privateKey: privateKey ?? null
+            privateKey: privateKey ?? null,
+            password: password ?? null
         }
 
     })
